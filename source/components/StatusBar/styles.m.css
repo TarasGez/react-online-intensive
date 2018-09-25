@@ -5,4 +5,28 @@
     border-bottom: #29487d;
     background:  #4257b2;
     margin-bottom: 20px;
+
+    & button {
+        display: flex;
+        background: none;
+        align-item: center;
+        margin: 4px auto;
+        padding: 0 10px;
+        border-radius: 5px;
+        
+        & img {
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--paletteColor6);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        & span {
+            margin: auto;
+            color: white;
+            font-size: 14px;
+        }
+    }
 }
