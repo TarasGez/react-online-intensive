@@ -27,7 +27,7 @@ export default class Feed extends Component {
 
         return (
             <section className = { Styles.feed }>
-                <Spinner isSpinning = { !spinnerState } />
+                <Spinner isSpinning = { spinnerState } />
                 <StatusBar />
                 <Composer />
                 {postsJSX}
