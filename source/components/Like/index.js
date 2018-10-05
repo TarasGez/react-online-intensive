@@ -9,13 +9,13 @@ import Styles from './styles.m.css';
 export default class Like extends Component {
     static propTypes = {
         _likePost: func.isRequired,
-        id: string.isRequired,
-        likes: arrayOf(
+        id:        string.isRequired,
+        likes:     arrayOf(
             shape({
-                id: string.isRequired,
+                id:        string.isRequired,
                 firstName: string.isRequired,
-                lastName: string.isRequired,
-           }), 
+                lastName:  string.isRequired,
+            }),
         ).isRequired,
     };
 
@@ -32,7 +32,7 @@ export default class Like extends Component {
     }
 
     state = {
-        showLikers: false
+        showLikers: false,
     }
 
     _showLikers () {
@@ -101,7 +101,7 @@ export default class Like extends Component {
         const likeStyles = this._getLikeStyles();
         const likersList = this._getLikersList();
         const likesDescription = this._getLikesDescription();
-        
+
         return (
             <section className = { Styles.like }>
                 <span className = { likeStyles } onClick = { this._likePost }>
@@ -110,8 +110,8 @@ export default class Like extends Component {
                 <div>
                     {likersList}
                     <span
-                        onMouseEnter = { this._showLikers}
-                        onMouseLeave = { this._hideLikers}>
+                        onMouseEnter = { this._showLikers }
+                        onMouseLeave = { this._hideLikers }>
                         {likesDescription}
                     </span>
                 </div>
