@@ -9,6 +9,7 @@ import { withProfile } from 'components/HOC/withProfile';
 import Styles from './styles.m.css';
 
 // class Composer extends Component {
+    
 @withProfile
 export default class Composer extends Component {
     static propTypes = {
