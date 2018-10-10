@@ -20,7 +20,7 @@ export default class Post extends Component {
         id:          string.isRequired,
         likes:       array.isRequired,
     };
-    
+
     _removePost = () => {
         const { _removePost, id } = this.props;
 
@@ -28,7 +28,7 @@ export default class Post extends Component {
     }
 
     _getCross = () => {
-        const { firstName, lastName, currentUserFirstName, currentUserLastName} = this.props;
+        const { firstName, lastName, currentUserFirstName, currentUserLastName } = this.props;
 
         return `${firstName} ${lastName}` === `${currentUserFirstName} ${currentUserLastName}` ? (
             <span className = { Styles.cross } onClick = { this._removePost } />

@@ -22,7 +22,7 @@ export default class Like extends Component {
             }),
         ).isRequired,
     };
-    
+
     state = {
         showLikers: false,
     }
