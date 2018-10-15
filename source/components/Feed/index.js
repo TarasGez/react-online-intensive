@@ -1,5 +1,7 @@
 // Core
 import React, { Component } from 'react';
+import { Transition } from 'react-transition-group';
+import { fromTo } from 'gsap';
 
 // Components
 import { withProfile } from 'components/HOC/withProfile';
@@ -8,6 +10,7 @@ import StatusBar from 'components/StatusBar';
 import Composer from 'components/Composer';
 import Post from 'components/Post';
 import Spinner from 'components/Spinner';
+import Postman from 'components/Postman';
 
 // Instruments
 import Styles from './styles.m.css';
@@ -16,35 +19,8 @@ import { socket } from 'socket/init';
 
 @withProfile
 export default class Feed extends Component {
-<<<<<<< HEAD
-    constructor () {
-        super();
-
-        this._createPost = this._createPost.bind(this);
-        this._setPostsFetchingState = this._setPostsFetchingState.bind(this);
-        this._likePost = this._likePost.bind(this);
-        this._removePost = this._removePost.bind(this);
-    }
-
-    state = {
-        posts: [
-            {
-                id:      '123',
-                comment: 'Hi there!',
-                created: 1526825076849,
-                likes:   [],
-            },
-            {
-                id:      '456',
-                comment: 'Hi hi!',
-                created: 1526825076855,
-                likes:   [],
-            }
-        ],
-=======
     state = {
         posts:           [],
->>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
         isPostsFetching: false,
     };
 
@@ -109,24 +85,12 @@ export default class Feed extends Component {
         });
     }
 
-<<<<<<< HEAD
-    async _createPost (comment) {
-        this._setPostsFetchingState(true);
-
-        const post = {
-            id:      getUniqueID(),
-            created: moment().utc(),
-            comment,
-            likes:   [],
-        };
-=======
     _fetchPosts = async () => {
         this._setPostsFetchingState(true);
 
         const response = await fetch(api, {
             method: 'GET',
         });
->>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
 
         const { data: posts } = await response.json();
 
@@ -153,20 +117,6 @@ export default class Feed extends Component {
 
         this.setState(({ posts }) => ({
             posts:           [post, ...posts],
-<<<<<<< HEAD
-            isPostsFetching: false,
-        }));
-    }
-
-    async _removePost (id) {
-        this._setPostsFetchingState(true);
-
-        await delay(1200);
-
-        this.setState(({ posts }) => ({
-            posts:           posts.filter((post) => post.id !== id),
-=======
->>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
             isPostsFetching: false,
         }));
     }
@@ -174,29 +124,6 @@ export default class Feed extends Component {
     _likePost = async (id) => {
         this._setPostsFetchingState(true);
 
-<<<<<<< HEAD
-        await delay(1200);
-
-        const newPosts = this.state.posts.map((post) => {
-            if (post.id === id) {
-                return {
-                    ...post,
-                    likes: [
-                        {
-                            id:        getUniqueID(),
-                            firstName: currentUserFirstName,
-                            lastName:  currentUserLastName,
-                        }
-                    ],
-                };
-            }
-
-            return post;
-        });
-
-        this.setState({
-            posts:           newPosts,
-=======
         const response = await fetch(`${api}/${id}`, {
             method:  'PUT',
             headers: {
@@ -210,7 +137,6 @@ export default class Feed extends Component {
             posts: posts.map(
                 (post) => post.id === likedPost.id ? likedPost : post,
             ),
->>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
             isPostsFetching: false,
         }));
     }
@@ -231,13 +157,19 @@ export default class Feed extends Component {
         }));
     }
 
+    _animateComposerEnter = (composer) => {
+        fromTo(
+            composer,
+            1,
+            { opacity: 0, rotationX: 50 },
+            { opacity: 1, rotationX: 0 },
+        );
+    }
+
     render () {
         const { isPostsFetching, posts } = this.state;
 
         const postsJSX = posts.map((post) => {
-<<<<<<< HEAD
-            return <Post key = { post.id } { ...post } _likePost = { this._likePost } _removePost = { this._removePost } />;
-=======
             return (
                 <Catcher key = { post.id }>
                     <Post
@@ -248,14 +180,20 @@ export default class Feed extends Component {
                     />
                 </Catcher>
             );
->>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
         });
 
         return (
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
-                <Composer _createPost = { this._createPost } />
+                <Transition
+                    appear
+                    in
+                    timeout = { 1000 }
+                    onEnter = { this._animateComposerEnter }>
+                    <Composer _createPost = { this._createPost } />
+                </Transition>
+                <Postman />
                 {postsJSX}
             </section>
         );
