@@ -1,8 +1,9 @@
 // Core
 import React, { Component } from 'react';
-import moment from 'moment';
 
 // Components
+import { withProfile } from 'components/HOC/withProfile';
+import Catcher from 'components/Catcher';
 import StatusBar from 'components/StatusBar';
 import Composer from 'components/Composer';
 import Post from 'components/Post';
@@ -10,9 +11,12 @@ import Spinner from 'components/Spinner';
 
 // Instruments
 import Styles from './styles.m.css';
-import { getUniqueID, delay } from 'instruments';
+import { api, TOKEN, GROUP_ID } from 'config/api';
+import { socket } from 'socket/init';
 
+@withProfile
 export default class Feed extends Component {
+<<<<<<< HEAD
     constructor () {
         super();
 
@@ -37,15 +41,75 @@ export default class Feed extends Component {
                 likes:   [],
             }
         ],
+=======
+    state = {
+        posts:           [],
+>>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
         isPostsFetching: false,
     };
 
-    _setPostsFetchingState (state) {
+    componentDidMount () {
+        const { currentUserFirstName, currentUserLastName } = this.props;
+
+        this._fetchPosts();
+        socket.emit('join', GROUP_ID);
+
+        socket.on('create', (postJSON) => {
+            const { data: createdPost, meta } = JSON.parse(postJSON);
+
+            if (
+                `${currentUserFirstName} ${currentUserLastName}` !==
+                `${meta.authorFirstName} ${meta.authorLastName}`
+            ) {
+                this.setState(({ posts }) => ({
+                    posts: [createdPost, ...posts],
+                }));
+            }
+        });
+
+        socket.on('remove', (postJSON) => {
+            const { data: removedPost, meta } = JSON.parse(postJSON);
+
+            if (
+                `${currentUserFirstName} ${currentUserLastName}` !==
+                `${meta.authorFirstName} ${meta.authorLastName}`
+            ) {
+                this.setState(({ posts }) => ({
+                    posts: posts.filter((post) => post.id !== removedPost.id),
+                }));
+            }
+        });
+
+        socket.on('like', (postJSON) => {
+            const { data: likedPost, meta } = JSON.parse(postJSON);
+
+            if (
+                `${currentUserFirstName} ${currentUserLastName}` !==
+                `${meta.authorFirstName} ${meta.authorLastName}`
+            ) {
+                this.setState(({ posts }) => ({
+                    posts: posts.map(
+                        (post) => post.id === likedPost.id ? likedPost : post,
+                    ),
+                }));
+            }
+        });
+
+    }
+
+    ComponentWillUnmount () {
+        socket.removeListener('create');
+        socket.removeListener('remove');
+        socket.removeListener('like');
+    }
+
+    _setPostsFetchingState = (state) => {
         this.setState({
             isPostsFetching: state,
         });
     }
 
+<<<<<<< HEAD
     async _createPost (comment) {
         this._setPostsFetchingState(true);
 
@@ -55,11 +119,41 @@ export default class Feed extends Component {
             comment,
             likes:   [],
         };
+=======
+    _fetchPosts = async () => {
+        this._setPostsFetchingState(true);
 
-        await delay(1200);
+        const response = await fetch(api, {
+            method: 'GET',
+        });
+>>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
+
+        const { data: posts } = await response.json();
+
+        this.setState({
+            posts,
+            isPostsFetching: false,
+        });
+
+    };
+
+    _createPost = async (comment) => {
+        this._setPostsFetchingState(true);
+
+        const response = await fetch(api, {
+            method:  'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization:  TOKEN,
+            },
+            body: JSON.stringify({ comment }),
+        });
+
+        const { data: post } = await response.json();
 
         this.setState(({ posts }) => ({
             posts:           [post, ...posts],
+<<<<<<< HEAD
             isPostsFetching: false,
         }));
     }
@@ -71,15 +165,16 @@ export default class Feed extends Component {
 
         this.setState(({ posts }) => ({
             posts:           posts.filter((post) => post.id !== id),
+=======
+>>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
             isPostsFetching: false,
         }));
     }
 
-    async _likePost (id) {
-        const { currentUserFirstName, currentUserLastName } = this.props;
-
+    _likePost = async (id) => {
         this._setPostsFetchingState(true);
 
+<<<<<<< HEAD
         await delay(1200);
 
         const newPosts = this.state.posts.map((post) => {
@@ -101,15 +196,59 @@ export default class Feed extends Component {
 
         this.setState({
             posts:           newPosts,
-            isPostsFetching: false,
+=======
+        const response = await fetch(`${api}/${id}`, {
+            method:  'PUT',
+            headers: {
+                Authorization: TOKEN,
+            },
         });
+
+        const { data: likedPost } = await response.json();
+
+        this.setState(({ posts }) => ({
+            posts: posts.map(
+                (post) => post.id === likedPost.id ? likedPost : post,
+            ),
+>>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
+            isPostsFetching: false,
+        }));
+    }
+
+    _removePost = async (id) => {
+        this._setPostsFetchingState(true);
+
+        await fetch(`${api}/${id}`, {
+            method:  'DELETE',
+            headers: {
+                Authorization: TOKEN,
+            },
+        });
+
+        this.setState(({ posts }) => ({
+            posts:           posts.filter((post) => post.id !== id),
+            isPostsFetching: false,
+        }));
     }
 
     render () {
         const { isPostsFetching, posts } = this.state;
 
         const postsJSX = posts.map((post) => {
+<<<<<<< HEAD
             return <Post key = { post.id } { ...post } _likePost = { this._likePost } _removePost = { this._removePost } />;
+=======
+            return (
+                <Catcher key = { post.id }>
+                    <Post
+                        key = { post.id }
+                        { ...post }
+                        _likePost = { this._likePost }
+                        _removePost = { this._removePost }
+                    />
+                </Catcher>
+            );
+>>>>>>> 22f833e11e9641c7e19e8f5a83f3d558824883a1
         });
 
         return (
