@@ -36,6 +36,11 @@ describe('Composer component:', () => {
         expect(result.find('section').hasClass('composer')).toBeTruthy();
     });
 
+    test('props testing: avatar must be "lisa", currentUserFirstName must be "Lisa"', () => {
+        expect(result.props().avatar).toBe('lisa');
+        expect(result.props().currentUserFirstName).toBe('Lisa');
+    });
+
     test('should have 1 "form" element', () => {
         expect(result.find('form')).toHaveLength(1);
     });
