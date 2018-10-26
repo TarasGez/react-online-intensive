@@ -32,8 +32,8 @@ const _updateCommentSpy = jest.spyOn(result.instance(), '_updateComment');
 describe('Composer component:', () => {
     test('should have 1 "section" element with "composer" class', () => {
         expect(result.find('section')).toHaveLength(1);
-        expect(result.find('.composer').length).toBe(1);
-        //expect(result.find('section').hasClass('composer')).to.equal(true);
+        expect(result.find('.composer')).toHaveLength(1);
+        expect(result.find('section').hasClass('composer')).toBeTruthy();
     });
 
     test('should have 1 "form" element', () => {
