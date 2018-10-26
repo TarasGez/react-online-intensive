@@ -3,8 +3,12 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Composer } from './';
 
+// Instruments
+
 const props = {
-    _createPost: jest.fn(),
+    _createPost:          jest.fn(),
+    avatar:               'lisa',
+    currentUserFirstName: 'Lisa',
 };
 
 const comment = 'Merry Christmas!';
@@ -22,9 +26,14 @@ const result = mount(<Composer { ...props } />);
 const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
 const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmit');
 
+const _submitOnEnterSpy = jest.spyOn(result.instance(), '_submitOnEnter');
+const _updateCommentSpy = jest.spyOn(result.instance(), '_updateComment');
+
 describe('Composer component:', () => {
-    test('should have 1 "section" element', () => {
+    test('should have 1 "section" element with "composer" class', () => {
         expect(result.find('section')).toHaveLength(1);
+        expect(result.find('.composer').length).toBe(1);
+        //expect(result.find('section').hasClass('composer')).to.equal(true);
     });
 
     test('should have 1 "form" element', () => {
@@ -72,6 +81,7 @@ describe('Composer component:', () => {
         });
         expect(result.find('textarea').text()).toBe(comment);
         expect(result.state()).toEqual(updatedState);
+        expect(_updateCommentSpy).toHaveBeenCalledTimes(1);
     });
 
     test('should handle form "submit" event', () => {
@@ -86,5 +96,14 @@ describe('Composer component:', () => {
     test('_submitComment and _handleFormSubmit class methods should be invoked once after form is submitted', () => {
         expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
         expect(_handleFormSubmitSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('should handle textarea "keypress" event', () => {
+        result.find('textarea').simulate('keypress');
+        expect(_submitOnEnterSpy).toHaveBeenCalledTimes(1);
+
+        result.find('textarea').simulate('keypress', { key: 'Enter' });
+        expect(_submitOnEnterSpy).toHaveBeenCalledTimes(2);
+        expect(_submitCommentSpy).toHaveBeenCalledTimes(2);
     });
 });
