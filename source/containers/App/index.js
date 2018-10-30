@@ -21,6 +21,13 @@ const options = {
 
 @hot(module)
 export default class App extends Component {
+    state = {
+
+    }
+
+    componentDidMount () {
+        //
+    }
     render () {
         return (
             <Catcher>
