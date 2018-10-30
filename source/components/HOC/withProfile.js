@@ -8,7 +8,7 @@ const withProfile = (Enhanceable) => {
         render () {
             return (
                 <Consumer>
-                    {context => <Enhanceable { ...context } { ...this.props } />}
+                    {(context) => <Enhanceable { ...context } { ...this.props } />}
                 </Consumer>
             );
         }
