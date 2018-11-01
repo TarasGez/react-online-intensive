@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { Transition } from 'react-transition-group';
 import { fromTo } from 'gsap';
 import { Link } from 'react-router-dom';
+import { func } from 'prop-types';
 
 // Components
 import { withProfile } from 'components/HOC/withProfile';
@@ -14,6 +15,10 @@ import { socket } from 'socket/init';
 
 @withProfile
 export default class StatusBar extends Component {
+    static propTypes = {
+        _authorizationApp: func.isRequired,
+    };
+
     state = {
         online: false,
     };
@@ -41,11 +46,18 @@ export default class StatusBar extends Component {
         fromTo(statusBar, 1, { opacity: 0 }, { opacity: 1 });
     };
 
+    _logOut = () => {
+        const { _authorizationApp } = this.props;
+
+        _authorizationApp(false);
+
+        console.log("_logOut____________");
+    }
+
     render () {
         const {
             avatar,
             currentUserFirstName,
-            currentUserLastName,
         } = this.props;
 
         const { online } = this.state;
@@ -73,9 +85,11 @@ export default class StatusBar extends Component {
                         <span>{currentUserFirstName}</span>
                     </Link>
                     <Link to = '/feed'>Feed</Link>
+                    <button className = { Styles.logout } onClick = { this._logOut }>
+                        Logout
+                    </button>
                 </section>
             </Transition>
-
         );
     }
 }

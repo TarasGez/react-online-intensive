@@ -79,4 +79,24 @@
             box-shadow: 0 0 2px #f40009;
         }
     }
+
+    & .logout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 20px;
+        min-height: 30px;
+        background-color: #4267b2;
+        color: rgb(171, 151, 218);
+        border: 1px solid #365899;
+        border-radius: 4px;
+        font-size: 12px;
+        user-select: none;
+        cursor: pointer;
+
+        &:hover {
+            color: white;
+            border: 1px solid white;
+        }
+    }
 }

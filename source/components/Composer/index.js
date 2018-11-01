@@ -10,10 +10,10 @@ import Styles from './styles.m.css';
 
 // class Composer extends Component {
 
-//@withProfile
-//export default class Composer extends Component {
+@withProfile
+export default class Composer extends Component {
 
-export class Composer extends Component {
+// export class Composer extends Component {
     static propTypes = {
         _createPost: func.isRequired,
     };
@@ -77,4 +77,4 @@ export class Composer extends Component {
     }
 }
 
-export default withProfile(Composer);
+// export default withProfile(Composer);
