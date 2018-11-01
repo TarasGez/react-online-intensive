@@ -18,7 +18,6 @@ const options = {
     avatar,
     currentUserFirstName: 'Тарас',
     currentUserLastName:  'Гезь',
-    // loginStatus:          localStorage.getItem('isAutorized'),
 };
 
 @hot(module)
@@ -28,23 +27,17 @@ export default class App extends Component {
     }
 
     componentDidMount () {
-        if (localStorage.getItem('isAutorized') === null) {
-            console.log("localStorage.getItem('isAutorized'):", localStorage.getItem('isAutorized'));
+        const localStorageData = JSON.parse(localStorage.getItem('isAutorized'));
 
-            this._toRender(false);
+        if (localStorage.getItem('isAutorized')) {
+            this._toRender(localStorageData);
         } else {
-            console.log("__________localStorage.getItem('isAutorized'):", localStorage.getItem('isAutorized'));
-
-            this._toRender(localStorage.getItem('isAutorized'));
+            this._toRender(false);
         }
     }
 
     _toRender = (isAvtorised) => {
-        console.log("_toRendered isAvtorised:", isAvtorised);
-
-        if (isAvtorised === true) {
-            console.log("_toRendered isAvtorised TRUE:", isAvtorised);
-
+        if (isAvtorised) {
             this.setState({
                 toRender:
                 <>
@@ -58,8 +51,6 @@ export default class App extends Component {
             });
 
         } else {
-            console.log("_toRendered isAvtorised FALSE:", isAvtorised);
-
             this.setState({
                 toRender:
                 <>
@@ -73,15 +64,11 @@ export default class App extends Component {
     };
 
     _authorizationApp = (loginStatusState) => {
-        localStorage.setItem('isAutorized', loginStatusState);
-
-        console.log("________________authorizationApp:", loginStatusState);
+        localStorage.setItem('isAutorized', JSON.stringify(loginStatusState));
 
         this.setState({
             isAvtorised: loginStatusState,
         });
-
-        console.log("Set ________________authorizationApp:", localStorage.getItem('isAutorized', loginStatusState));
 
         this._toRender(loginStatusState);
 
@@ -90,7 +77,6 @@ export default class App extends Component {
 
     clearLS = () => {
         localStorage.clear();
-        console.log("Clear");
     }
 
     render () {
