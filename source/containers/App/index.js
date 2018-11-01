@@ -61,7 +61,13 @@ export default class App extends Component {
             console.log("_toRendered isAvtorised FALSE:", isAvtorised);
 
             this.setState({
-                toRender: <Login _authorizationApp = { this._authorizationApp } />,
+                toRender:
+                <>
+                    <Switch>
+                        <Route path = '/login' render = { () => <Login _authorizationApp = { this._authorizationApp } /> } />
+                        <Redirect to = '/login' />
+                    </Switch>
+                </>,
             });
         }
     };
